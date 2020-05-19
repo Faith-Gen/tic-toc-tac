@@ -64,6 +64,16 @@
                     alert('You won!')
                     return
                 }
+
+                //diagonal checks
+                let diagonalArray = [
+                    [this.items[0][0], this.items[1][1], this.items[2][2]],
+                    [this.items[2][0], this.items[1][1], this.items[0][2]],
+                ]
+                if (this.checkRows(diagonalArray)) {
+                    alert('You won!')
+                    return
+                }
             },
             checkRows(rows) {
                 let won = false
