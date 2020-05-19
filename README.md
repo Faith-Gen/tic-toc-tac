@@ -1,0 +1,1 @@
+The test logic is in ttt/src/components/HelloWorld.vue
