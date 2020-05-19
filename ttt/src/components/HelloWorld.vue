@@ -7,6 +7,9 @@
         <div class="status">
             Next player: X
         </div>
+        <button @click="undoLastMove">
+            Undo last move
+        </button>
         <div class="board">
             <div class="board-row first-row" v-for="(row, rowIndex) in items">
                 <button class="square" v-for="(item, itemIndex) in row" @click="updateBox(rowIndex, itemIndex, item)">
@@ -29,7 +32,8 @@
                     ['X', '', ''],
                     ['', '', ''],
                     ['', '', ''],
-                ]
+                ],
+                itemsStack: []
             }
         },
         methods: {
@@ -40,15 +44,15 @@
 
                 this.items = JSON.parse(JSON.stringify(this.items))
 
+                this.itemsStack.push(this.items)
+
                 this.checkIfUserWon()
             },
             checkIfUserWon() {
                 let won = false
                 //horizontal check
-                if (this.checkRows(this.items)) {
-                    alert('You won!')
-                    return
-                }
+                if (this.checkRows(this.items))
+                    return alert('You won!')
 
                 //vertival check
                 let verticalArray = []
@@ -60,20 +64,16 @@
                     ])
                 })
 
-                if (this.checkRows(verticalArray)) {
-                    alert('You won!')
-                    return
-                }
+                if (this.checkRows(verticalArray))
+                    return alert('You won!')
 
                 //diagonal checks
                 let diagonalArray = [
                     [this.items[0][0], this.items[1][1], this.items[2][2]],
                     [this.items[2][0], this.items[1][1], this.items[0][2]],
                 ]
-                if (this.checkRows(diagonalArray)) {
-                    alert('You won!')
-                    return
-                }
+                if (this.checkRows(diagonalArray))
+                    return alert('You won!')
             },
             checkRows(rows) {
                 let won = false
@@ -83,7 +83,18 @@
                         won = true
                 })
                 return won
+            },
+            undoLastMove() {
+                if (this.itemsStack.length === 1) {
+                    return alert('You are back to the start')
+                }
+                this.itemsStack.pop()
+                this.items = JSON.parse(JSON.stringify(this.itemsStack[this.itemsStack.length - 1]));
+                console.log(this.items)
             }
+        },
+        created() {
+            this.itemsStack.push(this.items)
         }
     }
 </script>
